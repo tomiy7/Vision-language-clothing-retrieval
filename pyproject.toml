@@ -1,0 +1,39 @@
+[project]
+name = "vision-language-clothing-retrieval"
+version = "0.1.0"
+description = "Vision-language system for clothing retrieval"
+authors = [
+    { name = "Vladimir Mandić" },
+    { name = "Radenko Nikolić" },
+    { name = "Milica Tošić" }
+]
+readme = "README.md"
+requires-python = ">=3.12,<3.13"
+dependencies = []
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[dependency-groups]
+dev = [
+    "black (>=26.5.1,<27.0.0)",
+    "isort (>=8.0.1,<9.0.0)",
+    "flake8 (>=7.3.0,<8.0.0)",
+    "pytest (>=9.1.1,<10.0.0)",
+    "jupyter (>=1.1.1,<2.0.0)",
+    "setuptools (>=83.0.0,<84.0.0)"
+]
+
+[tool.poetry]
+packages = [
+    { include = "vision_language_clothing_retrieval", from = "src" }
+]
+
+[tool.black]
+line-length = 100
+target-version = ["py312"]
+
+[tool.isort]
+profile = "black"
+line_length = 100
