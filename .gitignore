@@ -33,3 +33,7 @@ data/raw/
 
 # Temporary / cache files
 *.log
+
+# Generated embedding artifacts
+embeddings/*.pt
+embeddings/*/*.pt

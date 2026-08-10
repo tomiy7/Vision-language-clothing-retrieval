@@ -2,10 +2,11 @@ import json
 from pathlib import Path
 from typing import Iterator
 
+from vision_language_clothing_retrieval.dataset.loader import DatasetLoader
 from vision_language_clothing_retrieval.dataset.sample import DatasetSample
 
 
-class DeepFashionDatasetLoader:
+class DeepFashionDatasetLoader(DatasetLoader):
     def __init__(
         self,
         image_dir: str,
