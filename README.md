@@ -195,6 +195,19 @@ Projekat koristi Poetry za upravljanje Python okruženjem i zavisnostima.
 ```bash
 poetry install
 ```
+### Potrebni paketi
+
+Glavne Python biblioteke koje projekat koristi su:
+
+- `torch` – rad sa tenzorima i generisanje embeddinga
+- `torchvision` – obrada slika i ResNet model
+- `transformers` – DistilBERT model i tokenizer
+- `Pillow` – učitavanje i obrada slika
+- `numpy` – rad sa vektorskim reprezentacijama
+- `pytest` – pokretanje testova
+- `jupyter` – pokretanje Jupyter notebook-ova
+
+Sve zavisnosti i njihove verzije definisane su u `pyproject.toml`.
 
 ### Aktiviranje okruženja
 
@@ -234,6 +247,16 @@ A instalirane Jupyter komponente:
 poetry run jupyter --version
 ```
 
+### Pokretanje testova
+
+Testovi se pokreću iz korena projekta komandom:
+
+```bash
+poetry run pytest
+```
+
+Na ovaj način se proverava ispravnost implementiranih komponenti nakon podešavanja okruženja.
+
 ## Struktura projekta
 
 ```text
@@ -242,12 +265,14 @@ poetry run jupyter --version
 │   ├── images/
 │   └── captions.json
 ├── notebooks/
-│   └── 01_dataset_analysis.ipynb
+│   ├── 01_dataset_analysis.ipynb
+│   └── 02_embedding_generation_demo.ipynb
 ├── src/
 │   └── vision_language_clothing_retrieval/
 │       ├── dataset/
 │       └── embeddings/
 ├── tests/
+│   ├── dataset/
 │   └── embeddings/
 ├── pyproject.toml
 ├── poetry.lock
@@ -268,3 +293,6 @@ poetry run jupyter --version
 
 4. Paszke, A., Gross, S., Massa, F., et al. (2019). *PyTorch: An Imperative Style, High-Performance Deep Learning Library*. Advances in Neural Information Processing Systems (NeurIPS).
    https://arxiv.org/abs/1912.01703
+
+5. Liu, Z., Luo, P., Qiu, S., Wang, X., & Tang, X. (2016). *DeepFashion: Powering Robust Clothes Recognition and Retrieval with Rich Annotations*. Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition (CVPR).
+   [https://arxiv.org/abs/1605.07396](https://arxiv.org/abs/1605.07396)
