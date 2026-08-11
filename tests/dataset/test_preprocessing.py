@@ -5,16 +5,12 @@ from vision_language_clothing_retrieval.dataset.deepfashion import (
 )
 from vision_language_clothing_retrieval.dataset.preprocessing import split_samples
 
-
 IMAGE_DIR = "/home/vladimir/Downloads/images"
 CAPTIONS_PATH = "/home/vladimir/Downloads/captions.json"
 
 
 def get_item_ids(samples):
-    return {
-        re.search(r"id_\d+", sample.sample_id).group()
-        for sample in samples
-    }
+    return {re.search(r"id_\d+", sample.sample_id).group() for sample in samples}
 
 
 def test_split_samples():
@@ -46,6 +42,7 @@ def test_split_samples():
     assert not train_ids & validation_ids
     assert not train_ids & test_ids
     assert not validation_ids & test_ids
+
 
 def test_split_is_deterministic():
     loader = DeepFashionDatasetLoader(

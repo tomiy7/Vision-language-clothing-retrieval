@@ -14,11 +14,17 @@ def split_samples(
     list[DatasetSample],
     list[DatasetSample],
 ]:
+    """Podeli skup podataka na train, validation i test skup."""
     if train_ratio + validation_ratio >= 1:
         raise ValueError("Train and validation ratios must sum to less than 1.")
 
+    # Uklanjaju se uzorci bez tekstualnog opisa jer nisu pogodni
+    # za multimodalnu obradu slike i teksta.
     valid_samples = [sample for sample in samples if sample.text.strip()]
 
+    # Uzorci se grupišu prema identifikatoru artikla.
+    # Na ovaj način svi prikazi istog artikla ostaju u istom skupu
+    # i sprečava se data leakage između train, validation i test skupa.
     groups: dict[str, list[DatasetSample]] = {}
 
     for sample in valid_samples:
@@ -30,10 +36,13 @@ def split_samples(
         item_id = match.group()
         groups.setdefault(item_id, []).append(sample)
 
+    # Mešaju se identifikatori artikala, a ne pojedinačni uzorci.
+    # Fiksiran seed omogućava da podela bude deterministička i ponovljiva.
     item_ids = list(groups.keys())
 
     random.Random(seed).shuffle(item_ids)
 
+    # Određuju se granice za train, validation i test skup.
     train_end = int(len(item_ids) * train_ratio)
     validation_end = int(len(item_ids) * (train_ratio + validation_ratio))
 
@@ -41,22 +50,11 @@ def split_samples(
     validation_ids = item_ids[train_end:validation_end]
     test_ids = item_ids[validation_end:]
 
-    train = [
-        sample
-        for item_id in train_ids
-        for sample in groups[item_id]
-    ]
+    # Na osnovu podeljenih ID-jeva artikala formiraju se konačni skupovi.
+    train = [sample for item_id in train_ids for sample in groups[item_id]]
 
-    validation = [
-        sample
-        for item_id in validation_ids
-        for sample in groups[item_id]
-    ]
+    validation = [sample for item_id in validation_ids for sample in groups[item_id]]
 
-    test = [
-        sample
-        for item_id in test_ids
-        for sample in groups[item_id]
-    ]
+    test = [sample for item_id in test_ids for sample in groups[item_id]]
 
     return train, validation, test

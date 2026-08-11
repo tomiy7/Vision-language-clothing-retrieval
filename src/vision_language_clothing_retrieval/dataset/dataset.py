@@ -4,6 +4,8 @@ from vision_language_clothing_retrieval.dataset.sample import DatasetSample
 
 
 class ClothingDataset:
+    """Dataset adapter koji omogućava pristup uzorcima preko indeksa."""
+
     def __init__(self, samples: Sequence[DatasetSample]) -> None:
         self._samples = list(samples)
 

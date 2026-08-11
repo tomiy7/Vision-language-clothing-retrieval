@@ -7,9 +7,12 @@ def merge_embeddings(
     input_dir: str,
     output_file: str,
 ) -> None:
+    """Spaja embeddinge iz više checkpoint fajlova u jedan fajl."""
+
     input_path = Path(input_dir)
     output_path = Path(output_file)
 
+    # Pronalaze se svi checkpoint fajlovi generisani tokom embedding procesa.
     checkpoints = sorted(input_path.glob("part_*.pt"))
 
     if not checkpoints:
@@ -19,6 +22,7 @@ def merge_embeddings(
     image_embeddings = []
     text_embeddings = []
 
+    # Svaki checkpoint sadrži identifikatore, image embeddinge i text embeddinge.
     for checkpoint in checkpoints:
         data = torch.load(checkpoint, weights_only=True)
 
@@ -26,12 +30,14 @@ def merge_embeddings(
         image_embeddings.append(data["image_embeddings"])
         text_embeddings.append(data["text_embeddings"])
 
+    # Embeddingi iz svih checkpoint-a spajaju se u jedinstvene tenzore.
     merged = {
         "sample_ids": sample_ids,
         "image_embeddings": torch.cat(image_embeddings),
         "text_embeddings": torch.cat(text_embeddings),
     }
 
+    # Kreira se izlazni direktorijum ako već ne postoji.
     output_path.parent.mkdir(parents=True, exist_ok=True)
     torch.save(merged, output_path)
 

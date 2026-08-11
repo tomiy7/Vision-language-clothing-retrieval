@@ -5,6 +5,8 @@ from vision_language_clothing_retrieval.dataset.sample import DatasetSample
 
 
 class MockDatasetLoader(DatasetLoader):
+    """Testna implementacija loadera sa unapred definisanim uzorcima."""
+
     def load(self) -> Iterable[DatasetSample]:
         return [
             DatasetSample(
