@@ -1,35 +1,54 @@
 # Python
+
 __pycache__/
 *.py[cod]
 *.pyo
 .pytest_cache/
 
 # Virtual environments
+
 .venv/
 venv/
 env/
 
 # IDE
+
 .idea/
 .vscode/
 
 # Jupyter
+
 .ipynb_checkpoints/
 
 # Build / packaging
+
 dist/
 build/
 *.egg-info/
 
 # OS
+
 .DS_Store
 
 # Environment / secrets
+
 .env
 .env.*
 
+# Dataset
+
+data/images/
+data/captions.json
+
 # Raw dataset
+
 data/raw/
 
 # Temporary / cache files
+
 *.log
+
+# Generated embeddings
+
+embeddings/
+
