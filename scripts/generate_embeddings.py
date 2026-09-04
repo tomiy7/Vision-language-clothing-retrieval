@@ -1,19 +1,3 @@
-"""
-Generiše embeddings/train.pt, embeddings/validation.pt i embeddings/test.pt
-za CEO dataset (za razliku od notebook-a 02, koji ovo radi samo na 8
-uzoraka radi demonstracije).
-
-Pokretanje (iz korena projekta):
-    poetry run python scripts/generate_embeddings.py
-
-Očekuje da postoje:
-    data/images/        - sve slike (flat folder)
-    data/captions.json  - {"ime_slike.jpg": "tekstualni opis", ...}
-
-Napomena: ovo je sporo na CPU-u (42.5k uzoraka kroz ResNet10 + DistilBERT).
-Za brzu proveru da pipeline radi, prvo pokreni sa smanjenim MAX_SAMPLES.
-"""
-
 import shutil
 from pathlib import Path
 
@@ -54,11 +38,9 @@ CHECKPOINTS_DIR = EMBEDDINGS_DIR / "_checkpoints"
 
 BATCH_SIZE = 32
 CHECKPOINT_BATCHES = 25
-DEVICE = "cpu"  # promeni u "cuda" ako imaš GPU
+DEVICE = "cpu"  
 
-# Postavi na broj (npr. 200) za brzu probu na malom podskupu, ili None
-# za ceo dataset.
-MAX_SAMPLES: int | None = 200#None
+MAX_SAMPLES: int | None = None
 
 def generate_split(
     split_name: str,
@@ -97,10 +79,7 @@ def generate_split(
         output_file=str(output_file),
     )
 
-    # Checkpoint fajlovi se brišu nakon uspešnog spajanja - nisu
-    # potrebni u finalnom embeddings/ folderu.
-    # shutil.rmtree(checkpoint_dir, ignore_errors=True)
-
+    shutil.rmtree(checkpoint_dir, ignore_errors=True)
 
 def main() -> None:
     print("Učitavanje uzoraka...")
