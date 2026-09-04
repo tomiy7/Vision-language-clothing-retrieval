@@ -27,7 +27,6 @@ from vision_language_clothing_retrieval.embeddings.text_encoder import (
     DistilBERTTextEncoder,
 )
 
-
 hf_logging.set_verbosity_error()
 
 DATA_DIR = Path("data")
@@ -39,11 +38,9 @@ CHECKPOINTS_DIR = EMBEDDINGS_DIR / "_checkpoints"
 
 BATCH_SIZE = 32
 CHECKPOINT_BATCHES = 25
-DEVICE = "cpu"  # promeni u "cuda" ako imaš GPU
+DEVICE = "cpu"  
 
-# Postavi na broj (npr. 200) za brzu probu na malom podskupu, ili None
-# za ceo dataset.
-MAX_SAMPLES: int | None = 500
+MAX_SAMPLES: int | None = None
 
 def generate_split(
     split_name: str,
@@ -82,10 +79,7 @@ def generate_split(
         output_file=str(output_file),
     )
 
-    # Checkpoint fajlovi se brišu nakon uspešnog spajanja - nisu
-    # potrebni u finalnom embeddings/ folderu.
     shutil.rmtree(checkpoint_dir, ignore_errors=True)
-
 
 def main() -> None:
     print("Učitavanje uzoraka...")
