@@ -1,6 +1,6 @@
 import torch
 
-from vision_language_clothing_retrieval.evaluation.evaluation_image_to_text import (
+from vision_language_clothing_retrieval.evaluation.image_to_text.evaluator import (
     ImageToTextEvaluator,
 )
 

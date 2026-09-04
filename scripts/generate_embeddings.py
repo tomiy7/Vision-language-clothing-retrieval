@@ -43,7 +43,7 @@ DEVICE = "cpu"  # promeni u "cuda" ako imaš GPU
 
 # Postavi na broj (npr. 200) za brzu probu na malom podskupu, ili None
 # za ceo dataset.
-MAX_SAMPLES: int | None = 200
+MAX_SAMPLES: int | None = 500
 
 def generate_split(
     split_name: str,
