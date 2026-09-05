@@ -11,8 +11,8 @@ from vision_language_clothing_retrieval.embeddings.text_encoder import (
 )
 
 
-def test_multimodal_encoder():
-    image_path = "/tmp/test_image.jpg"
+def test_multimodal_encoder(tmp_path):
+    image_path = tmp_path / "test_image.jpg"
     Image.new("RGB", (500, 300), "red").save(image_path)
 
     encoder = MultimodalEncoder(

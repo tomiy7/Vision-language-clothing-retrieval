@@ -5,8 +5,8 @@ from vision_language_clothing_retrieval.embeddings.image_encoder import (
 )
 
 
-def test_resnet10_image_encoder():
-    image_path = "/tmp/test_image.jpg"
+def test_resnet10_image_encoder(tmp_path):
+    image_path = tmp_path / "test_image.jpg"
 
     Image.new("RGB", (500, 300), "red").save(image_path)
 
