@@ -37,6 +37,9 @@ Za vizuelnu reprezentaciju koristi se **ResNet10** inicijalizovan kompatibilnim 
 ## Skup podataka
 
 Projekat koristi skup slika odeće praćenih tekstualnim opisima.
+[Link ka drajvu za preuzimanje podataka](https://drive.google.com/drive/folders/1An2c_ZCkeGmhJg0zUjtZF46vyJgQwIr2)  
+**Napomena:** dovoljno je da se skinu captions.json i images.zip
+
 
 Svaki uzorak sadrži:
 
@@ -484,7 +487,7 @@ Konačni model evaluiran je na test skupu od **4.136 uzoraka**.
 
 Dobijeni rezultati pokazuju da model uspešno uči zajednički prostor vizuelnih i tekstualnih reprezentacija.
 
-Posebno značajno poboljšanje dobijeno je korišćenjem transfer learning pristupa za vizuelni enkoder, odnosno inicijalizacijom kompatibilnih slojeva ResNet10 modela pretrained ResNet18 težinama i korišćenjem odgovarajućeg ImageNet preprocessing-a.
+**Posebno značajno poboljšanje dobijeno je korišćenjem transfer learning pristupa za vizuelni enkoder, odnosno inicijalizacijom kompatibilnih slojeva ResNet10 modela pretrained ResNet18 težinama i korišćenjem odgovarajućeg ImageNet preprocessing-a.**
 
 ---
 
