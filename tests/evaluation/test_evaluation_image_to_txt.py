@@ -18,6 +18,14 @@ def test_perfect_matches_give_recall_1():
         retriever=IdentityRetriever(),
         image_embeddings=shared_embeddings,
         text_embeddings=shared_embeddings,
+        sample_ids=[
+            "item-id_0-image",
+            "item-id_1-image",
+            "item-id_2-image",
+            "item-id_3-image",
+            "item-id_4-image",
+            "item-id_5-image",
+        ],
     )
 
     results = evaluator.evaluate(k_values=(1, 5))
@@ -36,8 +44,12 @@ def test_deterministic_worst_case_gives_last_rank():
         retriever=IdentityRetriever(),
         image_embeddings=image_embeddings,
         text_embeddings=text_embeddings,
+        sample_ids=[
+            "item-id_0-image",
+            "item-id_1-image",
+            "item-id_2-image",
+        ],
     )
-
     results = evaluator.evaluate(k_values=(1,))
 
     assert results["recall@1"] == 0.0
