@@ -19,12 +19,14 @@ if __name__ == "__main__":
         retriever=retriever,
         image_embeddings=embeddings["image_embeddings"],
         text_embeddings=embeddings["text_embeddings"],
+        sample_ids=embeddings["sample_ids"],
     )
 
     image_to_text_evaluator = ImageToTextEvaluator(
         retriever=retriever,
         image_embeddings=embeddings["image_embeddings"],
         text_embeddings=embeddings["text_embeddings"],
+        sample_ids=embeddings["sample_ids"],
     )
 
     t2i_results = text_to_image_evaluator.evaluate()

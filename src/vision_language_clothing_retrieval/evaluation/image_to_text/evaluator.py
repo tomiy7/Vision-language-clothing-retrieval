@@ -16,10 +16,12 @@ class ImageToTextEvaluator:
             retriever: MultimodalRetriever,
             image_embeddings: torch.Tensor,
             text_embeddings: torch.Tensor,
+            sample_ids: list[str],
     ) -> None:
         self.retriever = retriever
         self.image_embeddings = image_embeddings
         self.text_embeddings = text_embeddings
+        self.sample_ids = sample_ids
 
     def evaluate(self, k_values: tuple[int, ...] = (1, 5, 10)) -> dict:
         projected_images, projected_texts = self.retriever.project_embeddings(
@@ -32,7 +34,10 @@ class ImageToTextEvaluator:
 
         similarity_matrix = projected_images @ projected_texts.T
 
-        ranks = self._ranks_from_similarity(similarity_matrix)
+        ranks = self._ranks_from_similarity(
+            similarity_matrix,
+            self.sample_ids
+        )
 
         results = {
             "mean_rank": mean_rank(ranks),
@@ -45,14 +50,33 @@ class ImageToTextEvaluator:
 
 
     @staticmethod
-    def _ranks_from_similarity(similarity_matrix: torch.Tensor) -> list[int]:
+    def _ranks_from_similarity(
+            similarity_matrix: torch.Tensor,
+            sample_ids: list[str],
+    ) -> list[int]:
         n_queries = similarity_matrix.shape[0]
         ranks = []
 
         for i in range(n_queries):
             scores = similarity_matrix[i]
             sorted_indices = torch.argsort(scores, descending=True)
-            rank = (sorted_indices == i).nonzero(as_tuple=True)[0].item() + 1
-            ranks.append(rank)
+
+            correct_item_id = ImageToTextEvaluator._get_item_id(
+                sample_ids[i]
+            )
+
+            for rank, index in enumerate(sorted_indices, start=1):
+                retrieved_item_id = ImageToTextEvaluator._get_item_id(
+                    sample_ids[index.item()]
+                )
+
+                if retrieved_item_id == correct_item_id:
+                    ranks.append(rank)
+                    break
 
         return ranks
+
+    @staticmethod
+    def _get_item_id(sample_id: str) -> str:
+
+        return sample_id.split("-id_")[1].split("-")[0]

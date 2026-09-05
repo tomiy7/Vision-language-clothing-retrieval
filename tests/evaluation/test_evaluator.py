@@ -54,6 +54,11 @@ def create_evaluator() -> TextToImageEvaluator:
         retriever=retriever,
         image_embeddings=image_embeddings,
         text_embeddings=text_embeddings,
+        sample_ids=[
+            "item-id_0-image",
+            "item-id_1-image",
+            "item-id_2-image",
+        ],
     )
 
 
@@ -62,7 +67,7 @@ def test_get_rank():
 
     rank = evaluator.get_rank(
         text_embedding=evaluator.text_embeddings[1],
-        correct_index=1,
+        correct_sample_id=evaluator.sample_ids[1],
     )
 
     assert rank == 2
