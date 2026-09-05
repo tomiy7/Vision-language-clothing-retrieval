@@ -11,24 +11,30 @@ class FakeRetrievalService:
     """Fake verzija RetrievalService - isti interfejs, bez pravog
     modela/embeddinga/enkodera."""
 
-    def search_by_text(self, text: str, top_k: int = 5) -> list[dict]:
+    def retrieve_images(self, text: str, top_k: int = 5) -> list[dict]:
+        if top_k <= 0:
+            raise ValueError("top_k mora biti veći od 0.")
+
         return [
             {
                 "sample_id": f"sample_{i}",
+                "image_path": f"data/images/sample_{i}.jpg",
+                "text": f"caption for sample_{i}",
                 "score": round(1.0 - i * 0.1, 4),
-                "result_type": "image",
-                "content": f"/images/sample_{i}.jpg",
             }
             for i in range(top_k)
         ]
 
-    def search_by_image(self, image_path: str, top_k: int = 5) -> list[dict]:
+    def retrieve_texts(self, image_path: str, top_k: int = 5) -> list[dict]:
+        if top_k <= 0:
+            raise ValueError("top_k mora biti veći od 0.")
+
         return [
             {
                 "sample_id": f"sample_{i}",
+                "image_path": f"data/images/sample_{i}.jpg",
+                "text": f"caption for sample_{i}",
                 "score": round(1.0 - i * 0.1, 4),
-                "result_type": "text",
-                "content": f"caption for sample_{i}",
             }
             for i in range(top_k)
         ]
@@ -52,7 +58,7 @@ def test_search_by_text_returns_image_results():
 
     response = client.post(
         "/search",
-        data={"query_type": "text", "text": "red dress", "top_k": 3},
+        data={"query_type": "text", "text": "red dress", "top_k": "3"},
     )
 
     assert response.status_code == 200
@@ -81,7 +87,7 @@ def test_search_by_image_returns_text_results():
 
     response = client.post(
         "/search",
-        data={"query_type": "image", "top_k": 2},
+        data={"query_type": "image", "top_k": "2"},
         files={"image": ("query.jpg", fake_image, "image/jpeg")},
     )
 
@@ -153,6 +159,16 @@ def test_search_by_image_without_filename_is_rejected():
         "/search",
         data={"query_type": "image", "top_k": "2"},
         files={"image": ("", fake_image, "image/jpeg")},
+    )
+
+    assert response.status_code == 422
+
+def test_search_top_k_zero_returns_422():
+    client = _client_with_fake_service()
+
+    response = client.post(
+        "/search",
+        data={"query_type": "text", "text": "red dress", "top_k": "0"},
     )
 
     assert response.status_code == 422

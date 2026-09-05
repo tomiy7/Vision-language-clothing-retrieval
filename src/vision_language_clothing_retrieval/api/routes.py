@@ -8,7 +8,7 @@ from vision_language_clothing_retrieval.api.schemas import (
     SearchResponse, SearchResultItem
 )
 
-from vision_language_clothing_retrieval.api.fake_retrieval_service import (
+from vision_language_clothing_retrieval.services.retrieval_service import (
     RetrievalService,
 )
 
@@ -41,7 +41,20 @@ async def search(
                 detail="Polje 'text' je obavezno kada je query_type='text'."
             )
 
-        results = retrieval_service.search_by_text(text, top_k=top_k)
+        try:
+            raw_results = retrieval_service.retrieve_images(text, top_k=top_k)
+        except ValueError as error:
+            raise HTTPException(status_code=422, detail=str(error))
+
+        results = [
+            {
+                "sample_id": r["sample_id"],
+                "score": r["score"],
+                "result_type": "image",
+                "content": f"/images/{Path(r['image_path']).name}",
+            }
+            for r in raw_results
+        ]
 
     else:
         if image is None:
@@ -54,9 +67,21 @@ async def search(
         temp_path = Path(tempfile.gettempdir()) / filename
         temp_path.write_bytes(await image.read())
 
-        results = retrieval_service.search_by_image(str(temp_path), top_k=top_k)
+        try:
+            raw_results = retrieval_service.retrieve_texts(
+                str(temp_path), top_k=top_k
+            )
+        except ValueError as error:
+            raise HTTPException(status_code=422, detail=str(error))
 
-    # temporary
-    result_items = [SearchResultItem(**result) for result in results]
+        results = [
+            {
+                "sample_id": r["sample_id"],
+                "score": r["score"],
+                "result_type": "text",
+                "content": r["text"],
+            }
+            for r in raw_results
+        ]
 
-    return SearchResponse(query_type=query_type, results=result_items)
+    return SearchResponse(query_type=query_type, results=results)
