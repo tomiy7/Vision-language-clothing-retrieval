@@ -2,8 +2,8 @@ from vision_language_clothing_retrieval.dataset.deepfashion import (
     DeepFashionDatasetLoader,
 )
 
-IMAGE_DIR = "/home/vladimir/Downloads/images"
-CAPTIONS_PATH = "/home/vladimir/Downloads/captions.json"
+IMAGE_DIR = "data/images"
+CAPTIONS_PATH = "data/captions.json"
 
 
 def test_deepfashion_loader():

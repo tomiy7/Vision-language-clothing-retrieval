@@ -77,6 +77,14 @@ def test_text_to_image_perfect_matches_give_recall_1():
         retriever=IdentityRetriever(),
         image_embeddings=image_embeddings,
         text_embeddings=text_embeddings,
+        sample_ids=[
+            "item-id_0-image",
+            "item-id_1-image",
+            "item-id_2-image",
+            "item-id_3-image",
+            "item-id_4-image",
+            "item-id_5-image",
+        ],
     )
 
     results = evaluator.evaluate()
@@ -96,8 +104,15 @@ def test_text_to_image_worst_case_gives_low_recall():
         retriever=WorstCaseRetriever(),
         image_embeddings=image_embeddings,
         text_embeddings=text_embeddings,
+        sample_ids=[
+            "item-id_0-image",
+            "item-id_1-image",
+            "item-id_2-image",
+            "item-id_3-image",
+            "item-id_4-image",
+            "item-id_5-image",
+        ],
     )
-
     results = evaluator.evaluate()
 
     assert results["recall@1"] == 0.0
