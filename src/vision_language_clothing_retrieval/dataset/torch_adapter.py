@@ -3,7 +3,7 @@ from collections.abc import Sequence
 import torch
 from PIL import Image
 from torch.utils.data import Dataset
-from torchvision import transforms
+from torchvision.models import ResNet18_Weights
 from transformers import AutoTokenizer
 
 from vision_language_clothing_retrieval.dataset.sample import DatasetSample
@@ -28,12 +28,8 @@ class MultimodalCollator:
     def __init__(self) -> None:
         # Sve slike se svode na istu dimenziju i pretvaraju u tensor
         # kako bi mogle da se obrađuju u batch-u.
-        self.image_transform = transforms.Compose(
-            [
-                transforms.Resize((224, 224)),
-                transforms.ToTensor(),
-            ]
-        )
+        weights = ResNet18_Weights.DEFAULT
+        self.image_transform = weights.transforms()
 
         # Tokenizer priprema tekstualne opise za DistilBERT model.
         self.tokenizer = AutoTokenizer.from_pretrained("distilbert-base-uncased")

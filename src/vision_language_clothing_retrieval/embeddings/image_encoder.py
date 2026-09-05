@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 
 import torch
 from PIL import Image
-from torchvision import transforms
+from torchvision.models import ResNet18_Weights
 
 from vision_language_clothing_retrieval.embeddings.resnet import resnet10
 
@@ -20,12 +20,8 @@ class ResNet10ImageEncoder(ImageEncoder):
         self.model = resnet10()
         self.model.eval()
 
-        self.transform = transforms.Compose(
-            [
-                transforms.Resize((224, 224)),
-                transforms.ToTensor(),
-            ]
-        )
+        weights = ResNet18_Weights.DEFAULT
+        self.transform = weights.transforms()
 
     def encode(self, image_path: str) -> list[float]:
         # Slika se učitava kao RGB kako bi sve slike imale isti broj kanala.
