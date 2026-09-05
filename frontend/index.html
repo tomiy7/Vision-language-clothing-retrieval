@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Vision-language clothing retrieval</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div class="page">
+
+  <header class="masthead">
+    <h1>Vision-language clothing retrieval</h1>
+    <p>Describe a piece to find the closest photographs, or upload a photograph to find how it might be described.</p>
+  </header>
+
+  <div class="mode-toggle">
+    <button class="mode-tag active" id="tabText" type="button">Type the description → Find the image</button>
+    <button class="mode-tag" id="tabImage" type="button">Upload a photo → Get the description</button>
+  </div>
+
+  <div class="panel">
+
+    <!-- Text mode -->
+    <div id="textPanel">
+      <label class="field-label" for="queryText">Description</label>
+      <textarea class="text-input" id="queryText" placeholder="a red dress with long sleeves…"></textarea>
+    </div>
+
+    <!-- Image mode -->
+    <div id="imagePanel" style="display:none;">
+      <label class="field-label">Photograph</label>
+      <div class="drop-zone" id="dropZone">
+        <div id="dropZoneEmpty">
+          <div class="drop-title">Drag a photo here</div>
+          <p>or click to browse your files</p>
+        </div>
+        <div id="dropZonePreview" class="preview-row" style="display:none;">
+          <img id="previewImg" alt="Selected photo" />
+          <div>
+            <div class="preview-name" id="previewName"></div>
+            <button class="clear" type="button" id="clearImage">Remove</button>
+          </div>
+        </div>
+        <input type="file" id="imageInput" accept="image/*" />
+      </div>
+    </div>
+
+    <div class="controls-row">
+      <div class="top-k-field">
+        <label class="field-label" for="topK">Results</label>
+        <input type="number" id="topK" value="5" min="1" max="20" />
+      </div>
+      <button class="search-btn" id="searchBtn" type="button">Search</button>
+    </div>
+
+  </div>
+
+  <section class="results-section" id="resultsSection" style="display:none;">
+    <div class="results-header">
+      <h2 id="resultsTitle">Results</h2>
+      <span class="count" id="resultsCount"></span>
+    </div>
+    <div id="resultsBody"></div>
+  </section>
+
+</div>
+
+<script src="app.js"></script>
+
+</body>
+</html>
