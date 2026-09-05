@@ -77,3 +77,40 @@ class MultimodalTrainer:
 
         # Vraća se prosečan loss preko svih obrađenih batch-eva.
         return total_loss / num_batches
+
+    def evaluate_epoch(
+        self,
+        dataloader: DataLoader,
+        device: str = "cpu",
+    ) -> float:
+
+        # Model se postavlja u evaluation režim (npr. isključuje dropout
+        # ukoliko bi ga model imao).
+        self.model.eval()
+
+        total_loss = 0.0
+        num_batches = 0
+
+        with torch.no_grad():
+            for batch in dataloader:
+                image_embeddings = batch["image_embeddings"].to(device)
+                text_embeddings = batch["text_embeddings"].to(device)
+
+                projected_images, projected_texts = self.model(
+                    image_embeddings,
+                    text_embeddings,
+                )
+
+                loss = contrastive_loss(
+                    projected_images,
+                    projected_texts,
+                    temperature=self.temperature,
+                )
+
+                total_loss += loss.item()
+                num_batches += 1
+
+        return total_loss / num_batches
+
+
+
