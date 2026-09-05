@@ -645,39 +645,85 @@ Generisanje embeddinga može biti vremenski zahtevno, posebno kada se izvršava 
 ├── data/
 │   ├── images/
 │   └── captions.json
+│
 ├── embeddings/
 │   ├── train.pt
 │   ├── validation.pt
 │   ├── test.pt
 │   ├── multimodal_model.pt
-│   └── training_history.json
+│   └── experiments/
+│
 ├── notebooks/
 │   ├── 01_dataset_analysis.ipynb
 │   ├── 02_embedding_generation_demo.ipynb
 │   ├── 03_model_training_experiments.ipynb
 │   └── 04_retrieval_evaluation.ipynb
+│
 ├── scripts/
 │   ├── generate_embeddings.py
 │   ├── run_evaluation.py
 │   ├── smoke_test_retrieval.py
 │   └── test_retrieval_flow.py
+│
 ├── src/
 │   └── vision_language_clothing_retrieval/
 │       ├── api/
+│       │   ├── main.py
+│       │   ├── routes.py
+│       │   └── schemas.py
+│       │
 │       ├── dataset/
+│       │   ├── dataset.py
+│       │   ├── deepfashion.py
+│       │   ├── loader.py
+│       │   ├── mock_loader.py
+│       │   ├── preprocessing.py
+│       │   ├── sample.py
+│       │   └── torch_adapter.py
+│       │
 │       ├── embeddings/
+│       │   ├── generator.py
+│       │   ├── image_encoder.py
+│       │   ├── merge.py
+│       │   ├── multimodal_encoder.py
+│       │   ├── resnet.py
+│       │   ├── storage.py
+│       │   └── text_encoder.py
+│       │
 │       ├── evaluation/
 │       │   ├── image_to_text/
-│       │   └── text_to_image/
-│       ├── models/
+│       │   ├── text_to_image/
+│       │   └── metrics.py
+│       │
 │       ├── retrieval/
+│       │   ├── embedding_dataset.py
+│       │   ├── loss.py
+│       │   ├── matching.py
+│       │   ├── model.py
+│       │   ├── multimodal_retriever.py
+│       │   ├── projection.py
+│       │   ├── retriever.py
+│       │   ├── similarity.py
+│       │   ├── train.py
+│       │   └── trainer.py
+│       │
 │       └── services/
+│           └── retrieval_service.py
+│
+├── frontend/
+│   ├── app.js
+│   ├── index.html
+│   └── styles.css
+│
 ├── tests/
+│
 ├── pyproject.toml
 ├── poetry.lock
 ├── README.md
 └── .gitignore
 ```
+
+
 
 Direktorijum `embeddings/` sadrži generisane podatke i istrenirane parametre modela i ne mora biti verzionisan kroz Git.
 
