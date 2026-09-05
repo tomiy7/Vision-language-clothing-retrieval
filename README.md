@@ -293,6 +293,8 @@ Text embedding:  768
 
 Generisanje podržava periodično čuvanje checkpoint-a kako bi se obrada većeg skupa mogla nastaviti nakon eventualnog prekida.
 
+**Napomena:** Generisaniembedding fajlovi dostupni za preuzimanje na sledećem linku: [Link ka embedding fajlovima](https://drive.google.com/drive/folders/1QoevwOn8KCeRXKG72I04Pl1SRyXLd-p_?usp=sharing)
+
 ---
 
 ## Multimodalna projekcija
@@ -379,7 +381,37 @@ Istorija treninga čuva se u:
 embeddings/training_history.json
 ```
 
+## Rezultati najboljeg treninga
+
+| Batch size | Learning rate | Temperature | Best validation loss | Best epoch | Model path |
+| ---: | ---: | ---: | ---: | ---: | --- |
+| 16 | 0.001 | 0.15 | **1.720189** | 27 | `embeddings/multimodal_model.pt` |
+
 ---
+
+## Eksperimenti sa hiperparametrima
+
+U `03_model_training_experiments.ipynb` izvršen je **Grid Search** nad različitim kombinacijama hiperparametara:
+- `batch_size`
+- `learning_rate`
+- `temperature`
+
+Za svaku konfiguraciju model je treniran i evaluiran na **validation skupu**. Kandidati su poređeni pomoću retrieval metrika, pre svega **MRR** i **Recall@10**, kako bi se izabrala konfiguracija koja daje najbolje performanse u samom retrieval zadatku.
+
+`test.pt` skup nije korišćen tokom Grid Search-a niti pri izboru modela, već je ostavljen za konačnu evaluaciju modela u notebooku 04.
+
+**Izabrani model za finalnu evaluaciju**
+
+| Parametar | Vrednost |
+| --- | --- |
+| Model | **Candidate 1** |
+| Batch size | **16** |
+| Learning rate | **0.001** |
+| Temperature | **0.15** |
+| Najmanja greška na validaciji | **1.7202** |
+| Najbolja epoha po validation loss-u | **27** |
+---  
+
 
 ## Retrieval
 
@@ -461,33 +493,50 @@ Kod ove metrike je **manja vrednost bolja**.
 
 ---
 
-## Rezultati evaluacije
+## Rezultati finalne evaluacije
 
-Konačni model evaluiran je na test skupu od **4.136 uzoraka**.
+Konačni model, izabran tokom Grid Search eksperimenata, evaluiran je na izdvojenom test skupu od **4.136 uzoraka**.
+
+Dimenzije embeddinga korišćenih tokom evaluacije:
+
+| Reprezentacija | Dimenzija |
+| --- | ---: |
+| Image embedding | (4136, 512) |
+| Text embedding | (4136, 768) |
+| Projektovani image embedding | (4136, 256) |
+| Projektovani text embedding | (4136, 256) |
+
+Nakon projekcije, image i text embeddingi nalaze se u zajedničkom 256-dimenzionalnom embedding prostoru.
+
+Između svih test image i text reprezentacija formirana je matrica cosine similarity vrednosti dimenzije (4136, 4136), sa vrednostima u rasponu od **-0.9108** do **0.9425**.
 
 ### Text-to-Image Retrieval
 
 | Metrika | Rezultat |
 | --- | ---: |
-| Recall@1 | **0.0682** |
-| Recall@5 | **0.2282** |
-| Recall@10 | **0.3443** |
-| MRR | **0.1561** |
-| Mean Rank | **80.8864** |
+| Recall@1 | **0.0791** |
+| Recall@5 | **0.2297** |
+| Recall@10 | **0.3441** |
+| MRR | **0.1629** |
+| Mean Rank | **83.4894** |
 
 ### Image-to-Text Retrieval
 
 | Metrika | Rezultat |
 | --- | ---: |
-| Recall@1 | **0.0631** |
-| Recall@5 | **0.2084** |
-| Recall@10 | **0.3097** |
-| MRR | **0.1447** |
-| Mean Rank | **97.6555** |
+| Recall@1 | **0.0624** |
+| Recall@5 | **0.1973** |
+| Recall@10 | **0.2926** |
+| MRR | **0.1407** |
+| Mean Rank | **97.6308** |
 
-Dobijeni rezultati pokazuju da model uspešno uči zajednički prostor vizuelnih i tekstualnih reprezentacija.
+Dobijeni rezultati pokazuju da model uspešno uči zajednički embedding prostor i omogućava retrieval u oba smera: Text-to-Image i Image-to-Text.
+
+Najbolji rezultati ostvareni su u smeru Text-to-Image, gde je Recall@10 **0.3441**, dok je za Image-to-Text Recall@10 **0.2926**.
 
 **Posebno značajno poboljšanje dobijeno je korišćenjem transfer learning pristupa za vizuelni enkoder, odnosno inicijalizacijom kompatibilnih slojeva ResNet10 modela pretrained ResNet18 težinama i korišćenjem odgovarajućeg ImageNet preprocessing-a.**
+
+Napomena: AUC/ROC-AUC evaluacija biće dodatno uključena nakon završetka odgovarajuće analize u notebooku 04.
 
 ---
 
