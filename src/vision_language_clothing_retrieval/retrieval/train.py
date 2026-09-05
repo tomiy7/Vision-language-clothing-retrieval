@@ -152,7 +152,7 @@ if __name__ == "__main__":
         validation_embeddings_path="embeddings/validation.pt",
         output_path="embeddings/multimodal_model.pt",
         history_path="embeddings/training_history.json",
-        epochs=10,
+        epochs=30,
         batch_size=64,
         learning_rate=1e-3,
         temperature=0.07,
